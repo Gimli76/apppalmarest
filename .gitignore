@@ -1,3 +1,7 @@
+*_key.pem
+package-lock.json
+.vs
+
 # Logs
 logs
 *.log
