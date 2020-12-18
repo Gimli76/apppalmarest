@@ -1,13 +1,9 @@
-const bcrypt = require('bcryptjs');
 const { Pool } = require('pg');
 const config = require('../config');
 const express = require('express');
 const BaseDatos = new Pool(config.connectionData);
 var rutas = express.Router();
-
-var encriptar_clave = (clave) => {
-    return bcrypt.hashSync(clave, 10);
-}
+const encriptar_clave = require('./util').encriptar_clave;
 
 var consulta_registrar = async(req) => {
     let consulta = `INSERT INTO public."USUARIO"(
@@ -15,9 +11,10 @@ var consulta_registrar = async(req) => {
         nombre_usuario, 
         rol, 
         cargo, 
-        contrasena_usuario)
+        contrasena_usuario,
+        validado)
         VALUES ('${req.body.cc_usuario}', '${req.body.nombre_usuario}','${req.body.rol}',
-        '${req.body.cargo}', '${encriptar_clave(req.body.contrasena_usuario)}');`;
+        '${req.body.cargo}', '${encriptar_clave(req.body.contrasena_usuario)}', false);`;
     const cliente_bd = await BaseDatos.connect();
     let rta = await cliente_bd.query(consulta);
     cliente_bd.release();
