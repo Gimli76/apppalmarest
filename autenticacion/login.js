@@ -21,11 +21,12 @@ rutas.post('/login', function(req, res) {
                     } else {
                         const fecha_creacion_ms = Date.now();
                         const fecha_expiracion_ms = fecha_creacion_ms + config.auth.token_duration_minutes * 60000; //milisegundos
-                        const signedToken = auth_util.generar_token(user.cc_usuario);
+                        const signedToken = auth_util.generar_token(user.cc_usuario, user.rol);
 
                         res.status(200).send({
                             success: true,
                             token: signedToken,
+                            rol: user.rol,
                             vence: fecha_expiracion_ms,
                             creacion: fecha_creacion_ms
                         });

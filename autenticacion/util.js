@@ -1,6 +1,7 @@
 const express = require("express");
 const passport = require('passport');
 const jsonwebtoken = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
 //dos librerias necesarias para la configuración del passport-jwt
 const JwtStrategy = require('passport-jwt').Strategy;
 const ExtractJwt = require('passport-jwt').ExtractJwt;
@@ -34,8 +35,8 @@ const encriptar_clave = (clave) => {
     return bcrypt.hashSync(clave, config.auth.password_salt_rounds);
 }
 
-const generar_token = (cc_usuario) => {
-    const payload = { sub: cc_usuario };
+const generar_token = (cc_usuario, rol) => {
+    const payload = { sub: cc_usuario, rol: rol };
 
     return jsonwebtoken.sign(payload,
         config.auth.PRIV_KEY, {
